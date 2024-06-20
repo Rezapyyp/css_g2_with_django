@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{app_name}}</title>
+<style>
+body{
+    padding: 0;
+    margin: 0;
+}
+.center-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.center-flex-col{
+    display: flex;
+    align-items: center;
+}
+.center-flex-row{
+    display: flex;
+    justify-content: center;
+}
+.d-inline_block{
+    display: inline-block;
+}
+.box{
+    display: flex;
+    flex-direction: column ;
+    align-items: center;
+    width: 100vw;
+    height: fit-content;
+    background-color: rgb(87, 204, 224);
+}
+.add_file{
+    border-bottom: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-block: 4rem;
+}
+.add_file span{
+    font-size: x-large;
+}
+.add_file input[type="text"]{
+    font-size: x-large;
+    margin-block: 1rem;
+    text-align: center;
+}
+.add_file input[type="submit"]{
+    font-size: xx-large;
+    margin-bottom: 10px;
+}
+.files_box{
+    display: flex;
+    justify-content: center;
+    height: fit-content;
+    width: 80%;
+    padding: 3rem;
+    margin-top: 0;
+    border-bottom: 1px solid black;
+}
+.files_box span{
+    background-color: rgb(102, 245, 73) ;
+    padding: 1rem;
+    margin-inline: 5px;
+    border-radius: 10px;
+    font-size: x-large;
+    margin-top: 0;
+}
+.files_box span a{
+    color: rgb(93, 83, 179);
+    text-decoration: none;
+}
+.text-title{
+    font-size: xx-large;
+}
+</style>
+</head>
+<body>
+<div class="box">
+    <div class="add_file">
+        <span> file name :</span>
+        <input type="text">
+        <input value="add" type="submit">
+    </div>
+    <span class="text-title">files :</span>
+    <div class="files_box">
+        {% for file in files %}
+            <span>{{file}}</span>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
