@@ -1,0 +1,165 @@
+{% load l10n%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>files of {{folder_name}}</title>
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+
+    }
+    .b0{
+        border: 3px solid black;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(0, 255, 21);
+    }
+    form p{
+        margin: 10px;
+        margin-block: 2rem;
+        display: inline-block;
+        font-size:xx-large;
+    }
+
+    form input{
+        text-align: center;
+        font-size:xx-large;
+    }
+
+    .box{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .head{
+        width: 100%;
+    }
+
+    .file_list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+    }
+
+    .file_list .folder_box{
+        display: flex;
+        align-items: center;
+        justify-content:space-between ;
+        margin: 1rem;
+        width: 90%;
+        background-color:rgb(146, 247, 247);
+        border-radius: 5px;
+    }
+    .folder_box div{
+        margin : 1.25rem;
+    }
+    .file_list .folder_box .folder{
+        font-size: 2rem;
+    }
+
+    .folder a{
+        color: black;
+        text-decoration: none;
+    }
+    .file_list .folder_box .options span{
+        font-size: x-large;
+        background-color:blueviolet;
+        color: white;
+        padding: 5px;
+        border-radius: 10px;
+        margin-inline: 5px;
+    }
+    .file_list .folder_box .options span a{
+        font-size: x-large;
+        background-color:blueviolet;
+        color: white;
+        padding: 5px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+    .msgs{
+        width: 40%;
+        height: fit-content;
+    }
+
+    .msgs .success{
+        color: rgb(72, 255, 0);
+    }
+
+    .msgs .error{
+        color: rgb(255, 72, 0);
+    }
+
+    .msgs .msg-box{
+        position: relative;
+        border-bottom: 1px solid black;
+        margin-block: 5px;
+        font-size: 17px;
+    }
+    .msg{
+        font-size: 20px;
+        position: relative;
+        left: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="box">
+    
+    <div class="head">
+        <form method="post" action="{% url 'main:create_html_file' folder_name %}">
+            {% csrf_token %}
+            {{create_html_form.as_p}}
+            <input type="submit" autocomplete="off" value="Create Html File" name="createhtmlfile" id="submit_to_create_html_file">
+        </form>
+        <form method="post" action="{% url 'main:create_css_file' folder_name %}">
+            {% csrf_token %}
+            {{create_css_form.as_p}}
+            <input type="submit" autocomplete="off" value="Create Css File" name="createcssfile" id="submit_to_create_css_file">
+        </form>
+    </div>  
+    {% if messages %}
+        <div class="msgs">
+            {% for message in messages %}
+            <div class="msg-box {{ message.tags }}" >
+                <span>{{forloop.counter}}</span>
+                <span class="msg">{{ message|capfirst }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="file_list">
+        {% for file in html_files %}
+            <div class="folder_box" style="background-color: orange ">
+                <div class="folder"><a href="{% url 'main:files_of_folder' file.name %}">{{file.name}}</a></div>
+                <div class="options">
+                    <span><a href="{% url 'main:delete_html_file' folder_name file.id %}">Delete</a></span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="file_list">
+        {% for file in css_files %}
+            <div class="folder_box" style="background-color: blue-sky ">
+                <div class="folder"><a href="{% url 'main:files_of_folder' file.name %}">{{file.name}}</a></div>
+                <div class="options">
+                    <span><a href="{% url 'main:delete_css_file' folder_name file.id %}">Delete</a></span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

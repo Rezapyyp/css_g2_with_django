@@ -58,7 +58,7 @@ form input{
     justify-content:space-between ;
     margin: 1rem;
     width: 90%;
-    background-color:rgb(146, 247, 247);
+    background-color: yellow ;
     border-radius: 5px;
 }
 .folder_box div{
@@ -125,7 +125,6 @@ form input{
             {{create_folder_form.as_p}}
             <input type="submit" autocomplete="off" value="Create Folder" name="createfolder" id="submit_to_create_folder">
         </form>
-        <h1>{{l10n}}</h1>
     </div>
     {% if messages %}
         <div class="msgs">
@@ -140,7 +139,7 @@ form input{
     <div class="folder_list">
         {% for folder in folders %}
             <div class="folder_box">
-                <div class="folder"><a href="">{{folder.name}}</a></div>
+                <div class="folder"><a href="{% url 'main:files_of_folder' folder.name %}">{{folder.name}}</a></div>
                 <div class="options">
                     <span><a href="{% url 'main:delete_folder' folder.id %}">Delete</a></span>
                 </div>
