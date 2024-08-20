@@ -5,20 +5,29 @@ from django.core.exceptions import ValidationError
 from .managers import HtmlManager #, FolderManager
 
 
+def folder_name_validator(folder_name):
+    PATH  =  BASE_DIR / "templates" / "generated"
+    if " " in folder_name:
+        raise ValidationError("Folder_name can`t have a space !!! ")    
+    return folder_name
+
+
 class Folder(models.Model):
     # objects = FolderManager()
 
     PATH  =  BASE_DIR / "templates" / "generated"
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120, unique=True,validators=[folder_name_validator])
 
+    def get_path(self):
+        path =  self.PATH / self.name
+        return path
+    
     def save(self,*args, **kwargs):
         if self.name in listdir(self.PATH):
             ValidationError("You can't use this name to create a folder ... E):#main.Folde")
         else :
             path =  self.PATH / self.name
-            print(f"{path = }")
             mkdir(path)
-            print(self.name)
         super().save(*args, **kwargs)
 
 

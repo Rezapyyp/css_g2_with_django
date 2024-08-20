@@ -14,30 +14,6 @@ class Temp(TemplateView):
 
 
 
-
-# def list_files(request):  
-    
-#     context = {
-#     }
-#     return render(request,"",context)
-
-# def delete_file(request,folder_id):
-    
-#     context = {
-#     }
-#     return render(request,"",context)
-
-# def create_file(request):
-    
-#     context = {
-#     }
-#     return render(request,"",context)
-    
-
-
-####################################################################
-
-
 def list_folders(request):
     folders = Folder.objects.all()
     form = CreateFolderForm
@@ -45,6 +21,7 @@ def list_folders(request):
         "folders" : folders ,
         "create_folder_form" : form ,
     }
+    print(form)
     return render(request,"main/generator/folders/list.html",context)
 
 def delete_folder(request,folder_id):
@@ -64,14 +41,11 @@ def create_folder(request):
         messages.success(request, "folder craeted successfully ...")
         return redirect("main:list_folders")
     
-    messages.warning(request, "folder dont... craeted ...")
+    messages.error(request, "folder dont... craeted ...")
     return redirect("main:list_folders")
 
-# def workspace(request,folder_id):
-#     ...
-#     return render(request)
 
-####################################################################
+
 
 def BASE_DIR_apps_and_dirs(request):
     lis = []
