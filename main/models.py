@@ -36,10 +36,13 @@ class Folder(models.Model):
         super().save(*args, **kwargs)
 
 
-class File(models.Model):
-    name = models.SlugField(max_length=120, unique=True , validators=[file_name_validator])
+class SimpleFile(models.Model):
+    name = models.CharField(max_length=120, unique=True , validators=[file_name_validator])
     folder = models.ForeignKey(Folder , on_delete=models.DO_NOTHING)
+    str = models.TextField(default=None  , blank=True , null=True)
 
+    def __str__(self):
+        return self.name
     def get_path(self):
         PATH  =  BASE_DIR / "templates" / "generated" / self.folder.name / self.name
         return PATH
@@ -59,16 +62,22 @@ class File(models.Model):
             with open(self.name,"w") as f:
                 # f.write("<!DOCTYPE html>\n")
                 f.write(self.str)
+    
+
+    # class Meta :
+    #     abstract : True
+    
 
 
-class Html(File):
+
+class Html(SimpleFile):
     objects = HtmlManager()
 
     json = models.TextField(default=None , blank=True , null=True)
     dict = models.TextField(default=None , blank=True , null=True)
 
 
-class Css(File):
+class Css(SimpleFile):
     objects = CssManager()
 
     json = models.TextField(default=None , blank=True , null=True)
