@@ -37,10 +37,10 @@ def create_folder(request):
         cd = form.cleaned_data
         folder = Folder.objects.create(name=cd["name"])
         folder.save()
-        messages.success(request, "folder craeted successfully ...")
+        messages.success(request, "folder created successfully ...")
         return redirect("main:list_folders")
     
-    messages.error(request, "folder dont... craeted ...")
+    messages.error(request, "folder dont... created ...")
     return redirect("main:list_folders")
 
 # def rename_folder()
@@ -67,8 +67,7 @@ def files_of_folder(request,folder_name):
 def delete_html_file(request,folder_name,file_id):
     file = Html.objects.get(id=file_id)
     folder = Folder.objects.get(name=folder_name)
-    path = folder.PATH / folder.name / file.name
-    system(f"rm -rf {path}")
+    system(f"rm -rf {file.get_path()}")
     file.delete()
     messages.success(request,"Html file Deleted successfully")
     return redirect("main:files_of_folder", folder.name)
@@ -76,7 +75,7 @@ def delete_html_file(request,folder_name,file_id):
 def delete_css_file(request,folder_name,file_id):
     file = Css.objects.get(id=file_id)
     folder = Folder.objects.get(name=folder_name)
-    path = folder.PATH / folder.name / file.name
+    path = folder.PATH / folder.name / file.get_name()
     system(f"rm -rf {path}")
     file.delete()
     messages.success(request,"Css file Deleted successfully")
@@ -88,13 +87,13 @@ def create_html_file(request,folder_name):
     if form.is_valid():
         cd = form.cleaned_data
         folder = Folder.objects.get(name=folder_name)
-        html_file = Html.objects.create(name=cd["name"],folder=folder)
+        html_file = Html.objects.create_file(name=cd["name"],folder=folder)
         html_file.save()
         
-        messages.success(request, "Html file craeted successfully ...")
+        messages.success(request, "Html file created successfully ...")
         return redirect("main:files_of_folder",folder_name)
 
-    messages.error(request, "Html file dont... craeted ...")
+    messages.error(request, "Html file dont... created ...")
     return redirect("main:files_of_folder",folder_name)
 
 def create_css_file(request,folder_name):
@@ -102,24 +101,45 @@ def create_css_file(request,folder_name):
     if form.is_valid():
         cd = form.cleaned_data
         folder = Folder.objects.get(name=folder_name)
-        html_file = Css.objects.create(name=cd["name"],folder=folder)
+        html_file = Css.objects.create_file(name=cd["name"],folder=folder)
         html_file.save()
         
-        messages.success(request, "Css file craeted successfully ...")
+        messages.success(request, "Css file created successfully ...")
         return redirect("main:files_of_folder",folder_name)
 
-    messages.error(request, "Css file dont... craeted ...")
+    messages.error(request, "Css file dont... created ...")
     return redirect("main:files_of_folder",folder_name)
 
 
-# def rename_html_file()
-#    coming soon
-
-# def rename_css_file()
-#    coming soon
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def rename_html_file_()
+
+#    coming soooooon
+
+# def rename_css_file_()
+
+#    coming soooooon
 
 
 

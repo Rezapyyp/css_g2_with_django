@@ -15,8 +15,8 @@ class Command(BaseCommand):
     def handle(self, *args , **options):
         system("clear")
         # step 1
-        path = DATABASES["default"]["NAME"]
-        system(f"rm -rf {path}")
+        db_path = DATABASES["default"]["NAME"]
+        system(f"rm -rf {db_path}")
         system("python manage.py makemigrations")
         system("python manage.py migrate")
         user = User.objects.create_superuser(username="reza" , email="reza@gmail.com" , password="reza1313" )

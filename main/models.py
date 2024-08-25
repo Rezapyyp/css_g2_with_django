@@ -2,7 +2,7 @@ from django.db import models
 from config.settings import BASE_DIR
 from os import listdir , mkdir , chdir
 from django.core.exceptions import ValidationError
-from .managers import HtmlManager #, FolderManager
+from .managers import HtmlManager , CssManager
 
 
 def folder_name_validator(folder_name):
@@ -11,14 +11,9 @@ def folder_name_validator(folder_name):
         raise ValidationError("Folder_name can`t have a space !!! ")    
     return folder_name
 
-def html_name_validator(value):
-    if " " or ".html" in value :
+def file_name_validator(value):
+    if " " in value :
         raise ValidationError("Error")
-    return value
-
-def css_name_validator(value):
-    # if " " or ".css" in value :
-    #     raise ValidationError("Error")
     return value
 
 
@@ -41,54 +36,45 @@ class Folder(models.Model):
         super().save(*args, **kwargs)
 
 
+class File(models.Model):
+    name = models.SlugField(max_length=120, unique=True , validators=[file_name_validator])
+    folder = models.ForeignKey(Folder , on_delete=models.DO_NOTHING)
+
+    def get_path(self):
+        PATH  =  BASE_DIR / "templates" / "generated" / self.folder.name / self.name
+        return PATH
+    
+    def is_html_file(self):
+        ...
+    
+    def is_css_file(self):
+        ...
+
+    def save(self, *args , **kwargs):
+        super().save(*args , **kwargs)
+        if self.str :
+            path = BASE_DIR / "templates" / "generated" / self.folder.name
+            chdir(path)
+            # file_name = self.name + ".html"
+            with open(self.name,"w") as f:
+                # f.write("<!DOCTYPE html>\n")
+                f.write(self.str)
 
 
-class Html(models.Model):
+class Html(File):
     objects = HtmlManager()
 
-    name = models.SlugField(max_length=120, unique=True)
-    json = models.TextField(default=None , blank=True , null=True,validators=[html_name_validator])
-    dict = models.TextField(default=None , blank=True , null=True)
-    str = models.TextField(default=None  , blank=True , null=True)
-
-    folder = models.ForeignKey(Folder , on_delete=models.DO_NOTHING)
-
-    
-    def get_name(self):
-        return self.name+".html"
-
-    def save(self, *args , **kwargs):
-        super().save(*args , **kwargs)
-        if self.str :
-            path = BASE_DIR / "templates" / "generated" / self.folder.name
-            chdir(path)
-            file_name = self.name + ".html"
-            with open(file_name,"w") as f:
-                f.write("<!DOCTYPE html>\n")
-                f.write(self.str)
-
-
-class Css(models.Model):
-    # objects = CssManager()
-
-    name = models.SlugField(max_length=120, unique=True , validators=[css_name_validator])
     json = models.TextField(default=None , blank=True , null=True)
     dict = models.TextField(default=None , blank=True , null=True)
-    str = models.TextField(default=None  , blank=True , null=True)
 
-    folder = models.ForeignKey(Folder , on_delete=models.DO_NOTHING)
 
-    
+class Css(File):
+    objects = CssManager()
 
-    def save(self, *args , **kwargs):
-        super().save(*args , **kwargs)
-        if self.str :
-            path = BASE_DIR / "templates" / "generated" / self.folder.name
-            chdir(path)
-            file_name = self.name + ".css"
-            with open(file_name,"w") as f:
-                f.write("<!DOCTYPE html>\n")
-                f.write(self.str)
+    json = models.TextField(default=None , blank=True , null=True)
+    dict = models.TextField(default=None , blank=True , null=True)
+
+
 
 
 

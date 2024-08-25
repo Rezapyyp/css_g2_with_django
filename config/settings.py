@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     "chat",
     "main",
+    "editor",
 ]
 
 MIDDLEWARE = [

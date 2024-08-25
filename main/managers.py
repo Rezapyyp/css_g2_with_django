@@ -1,12 +1,26 @@
+from typing import Any
 from django.db import models
 from json import dumps , loads 
 from .generators import dict_to_html
-
+from config.settings import BASE_DIR
+from os import system
 
 
 
 class HtmlManager(models.Manager):
 
+    def create_file(self, name , folder):
+        path = BASE_DIR / "templates" / "generated" / folder.name / f"{name}.html" 
+        system(f"touch {path}")
+        obj = self.model(name=name,folder=folder)
+        return obj
+    
+    def delete_file(self, name , folder):
+        path = BASE_DIR / "templates" / "generated" / folder.name / f"{name}.html" 
+        system(f"touch {path}")
+        obj = self.model(name=name,folder=folder)
+        return obj
+    
 
     def insert_json(self,json_str,**extra_fields):
         _dict = loads(json_str)
@@ -23,16 +37,13 @@ class HtmlManager(models.Manager):
         return obj
 
 
-class FolderManager(models.Manager):
-    ...
-    # def delete(self,*args,**kwargs):
-    #     print("\n")
-    #     print("DELETED")
-    #     print("\n")
-    #     return super().delete(*args,**kwargs)
+class CssManager(models.Manager):
 
-
-
+    def create_file(self, name , folder):
+        path = BASE_DIR / "templates" / "generated" / folder.name / f"{name}.css" 
+        system(f"touch {path}")
+        obj = self.model(name=name,folder=folder)
+        return obj
 
 
 
